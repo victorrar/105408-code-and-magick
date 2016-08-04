@@ -14,23 +14,24 @@ var getMessage = function(a,b){
 	}
 	//Если 1 аргумент - массив
 	if(Array.isArray(a)){
+		var arrLength = a.length;
+		var i;
 		// и второй тоже
 		if(Array.isArray(b)){
+			//проверка длинн массивов
+			arrLength = Math.min(a.length, b.length);
 			var arrMultSum = 0;
-			for(var i = 0; i < a.length; ++i ){
+			for(i = 0; i < arrLength; ++i ){
 				arrMultSum += a[i] + b[i];
 			}
 			return "Я прошёл " + arrMultSum + " метров";
 
 		}
 		// только первый
-		else{
 			var arraySum = 0;
-			for(var i = 0; i < a.length; ++i ){
+			for(i = 0; i < arrLength; ++i ){
 				arraySum += a[i];
 			}
 			return "Я прошёл " + arraySum + " шагов";
-
-		}
 	}
 }
