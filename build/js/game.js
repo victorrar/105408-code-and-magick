@@ -395,20 +395,81 @@ window.Game = (function() {
      * Отрисовка экрана паузы.
      */
     _drawPauseScreen: function() {
+      //константы
+      var INTRO_TEXT = 'Я умею перемещаться и летать по нажатию на стрелки. А если нажать шифт, я выстрелю файрболом.';
+      var PAUSE_TEXT = 'Я же не буду стоять здесь вечно, правда?';
+      var WIN_TEXT = 'Скастовать фаербол не так то просто, но я смог!';
+      var FAIL_TEXT = 'Упс. Что-то пошло не так, как хотелось.';
+      var MSG_WIDTH = 300;
+      var MSG_HEIGHT = 150;
+      var TEXT_HEIGHT = 16;
+      this.ctx.font = 'bold ' + TEXT_HEIGHT + 'px PT Mono';
+      var msgTextColor = '#000000';
+
+      var widthCenter = this.canvas.width / 2;
+      var heightCenter = this.canvas.height / 2;
+      var currentText;
+      var bottomText;
+
+      //Рисует четырехугольник
+      var drawBackground = function(context, offsetX, offsetY, color) {
+        context.fillStyle = color;
+        context.beginPath();
+        context.moveTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
+        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
+        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter + MSG_HEIGHT / 2 + offsetY);
+        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX - 20, heightCenter + MSG_HEIGHT / 2 + offsetY + 10);
+        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
+        context.fill();
+        context.closePath();
+      };
+      //Разбивает на строки и пишет текст
+      function wrapText(context, text, marginLeft, marginTop, maxWidth, lineHeight) {
+        var words = text.split(' ');
+        var countWords = words.length;
+        var line = '';
+        for (var n = 0; n < countWords; n++) {
+          var testLine = line + words[n] + ' ';
+          var testWidth = context.measureText(testLine).width;
+          if (testWidth > maxWidth) {
+            context.fillText(line, marginLeft, marginTop);
+            line = words[n] + ' ';
+            marginTop += lineHeight;
+          } else {
+            line = testLine;
+          }
+        }
+
+        context.fillText(line, marginLeft, marginTop);
+      }
+
+      drawBackground(this.ctx, 10, 10, 'rgba(0, 0, 0, 0.7)');
+      drawBackground(this.ctx, 0, 0, '#FFFFFF');
+
       switch (this.state.currentStatus) {
         case Verdict.WIN:
-          console.log('you have won!');
+          currentText = WIN_TEXT;
+          bottomText = 'Нажмите пробел для рестарта.';
           break;
         case Verdict.FAIL:
-          console.log('you have failed!');
+          currentText = FAIL_TEXT;
+          bottomText = 'Нажмите пробел для рестарта.';
           break;
         case Verdict.PAUSE:
-          console.log('game is on pause!');
+          currentText = PAUSE_TEXT;
+          bottomText = 'Нажмите пробел для продолжения.';
           break;
         case Verdict.INTRO:
-          console.log('welcome to the game! Press Space to start');
+          currentText = INTRO_TEXT;
+          bottomText = 'Нажмите пробел для старта.';
           break;
       }
+      this.ctx.textAlign = 'left';
+      this.ctx.fillStyle = msgTextColor;
+      wrapText(this.ctx, currentText, widthCenter - MSG_WIDTH / 2 + 20, heightCenter - MSG_HEIGHT / 2 + 30, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
+      this.ctx.fillStyle = '#018E30';
+      this.ctx.textAlign = 'center';
+      this.ctx.fillText(bottomText, widthCenter, heightCenter + MSG_HEIGHT / 2 - 20, MSG_WIDTH - 20);
     },
 
     /**
