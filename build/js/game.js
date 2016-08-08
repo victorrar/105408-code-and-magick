@@ -476,8 +476,8 @@ window.Game = (function() {
       function printText(context, lineHeight, marginLeft, marginTop) {
         var arrLength = linesArray.length;
         var i;
-        this.ctx.textAlign = 'left';
-        this.ctx.fillStyle = msgTextColor;
+        context.textAlign = 'left';
+        context.fillStyle = msgTextColor;
         for(i = 0; i < arrLength; i++) {
           context.fillText(linesArray[i], marginLeft, marginTop);
           marginTop += lineHeight;
