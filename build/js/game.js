@@ -410,6 +410,7 @@ window.Game = (function() {
       var heightCenter = this.canvas.height / 2;
       var currentText;
       var bottomText;
+      var offsetByX = 120;
 
       //Рисует четырехугольник
       var drawBackground = function(context, offsetX, offsetY, color) {
@@ -443,8 +444,8 @@ window.Game = (function() {
         context.fillText(line, marginLeft, marginTop);
       }
 
-      drawBackground(this.ctx, 10, 10, 'rgba(0, 0, 0, 0.7)');
-      drawBackground(this.ctx, 0, 0, '#FFFFFF');
+      drawBackground(this.ctx, 10 + offsetByX, 10, 'rgba(0, 0, 0, 0.7)');
+      drawBackground(this.ctx, offsetByX, 0, '#FFFFFF');
 
       switch (this.state.currentStatus) {
         case Verdict.WIN:
@@ -466,10 +467,10 @@ window.Game = (function() {
       }
       this.ctx.textAlign = 'left';
       this.ctx.fillStyle = msgTextColor;
-      wrapText(this.ctx, currentText, widthCenter - MSG_WIDTH / 2 + 20, heightCenter - MSG_HEIGHT / 2 + 30, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
+      wrapText(this.ctx, currentText, widthCenter - MSG_WIDTH / 2 + 20 + offsetByX, heightCenter - MSG_HEIGHT / 2 + 30, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
       this.ctx.fillStyle = '#018E30';
       this.ctx.textAlign = 'center';
-      this.ctx.fillText(bottomText, widthCenter, heightCenter + MSG_HEIGHT / 2 - 20, MSG_WIDTH - 20);
+      this.ctx.fillText(bottomText, widthCenter + offsetByX, heightCenter + MSG_HEIGHT / 2 - 20, MSG_WIDTH - 20);
     },
 
     /**
