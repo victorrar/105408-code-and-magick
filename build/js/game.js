@@ -426,6 +426,7 @@ window.Game = (function() {
         offsetByX = me.x - (640 / 6 );
         msgReversed = false;
       }
+
       //ограничитель передвижения сообщения, чтобы в дерево не врезалось
       //изначально сообщение стоит по центру, поэтому MSG_WIDTH / 2
       if(offsetByX > 0) {
