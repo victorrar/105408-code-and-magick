@@ -410,16 +410,36 @@ window.Game = (function() {
       var heightCenter = this.canvas.height / 2;
       var currentText;
       var bottomText;
-      var offsetByX = 120;
+      var offsetByX = 0;
+      var msgReversed;
+
+      //маг
+      //me.x  - положение мага по x
+      //min - 0; max - 639
+      var me = this.state.objects.filter(function(object) {
+        return object.type === ObjectType.ME;
+      })[0];
+      if(me.x > 640 / 2) {
+        offsetByX = me.x - (640 / 6 ) - MSG_WIDTH - 60 - me.width;
+        msgReversed = true;
+      } else {
+        offsetByX = me.x - (640 / 6 );
+        msgReversed = false;
+      }
+      //ограничитель передвижения сообщения, чтобы в дерево не врезалось
+      //изначально сообщение стоит по центру, поэтому MSG_WIDTH / 2
+      if(offsetByX > 0) {
+        offsetByX = Math.min(offsetByX, (this.canvas.width - MSG_WIDTH) / 2 - 35);
+      }
 
       //Рисует четырехугольник
-      var drawBackground = function(context, offsetX, offsetY, color) {
+      var drawBackground = function(context, offsetX, offsetY, color, reversed) {
         context.fillStyle = color;
         context.beginPath();
         context.moveTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
         context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
-        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter + MSG_HEIGHT / 2 + offsetY);
-        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX - 20, heightCenter + MSG_HEIGHT / 2 + offsetY + 10);
+        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX + (20 * reversed), heightCenter + MSG_HEIGHT / 2 + offsetY + (10 * reversed));
+        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX - (20 * !reversed), heightCenter + MSG_HEIGHT / 2 + offsetY + (10 * !reversed));
         context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
         context.fill();
         context.closePath();
@@ -444,9 +464,6 @@ window.Game = (function() {
         context.fillText(line, marginLeft, marginTop);
       }
 
-      drawBackground(this.ctx, 10 + offsetByX, 10, 'rgba(0, 0, 0, 0.7)');
-      drawBackground(this.ctx, offsetByX, 0, '#FFFFFF');
-
       switch (this.state.currentStatus) {
         case Verdict.WIN:
           currentText = WIN_TEXT;
@@ -465,6 +482,8 @@ window.Game = (function() {
           bottomText = 'Нажмите пробел для старта.';
           break;
       }
+      drawBackground(this.ctx, 10 + offsetByX, 10, 'rgba(0, 0, 0, 0.7)', msgReversed);
+      drawBackground(this.ctx, offsetByX, 0, '#FFFFFF', msgReversed);
       this.ctx.textAlign = 'left';
       this.ctx.fillStyle = msgTextColor;
       wrapText(this.ctx, currentText, widthCenter - MSG_WIDTH / 2 + 20 + offsetByX, heightCenter - MSG_HEIGHT / 2 + 30, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
