@@ -401,17 +401,19 @@ window.Game = (function() {
       var WIN_TEXT = 'Скастовать фаербол не так то просто, но я смог!';
       var FAIL_TEXT = 'Упс. Что-то пошло не так, как хотелось.';
       var MSG_WIDTH = 300;
-      var MSG_HEIGHT = 150;
       var TEXT_HEIGHT = 16;
       this.ctx.font = 'bold ' + TEXT_HEIGHT + 'px PT Mono';
       var msgTextColor = '#000000';
+      var msgBottomColor = '#018E30';
 
+      var msgHeight;
       var widthCenter = this.canvas.width / 2;
       var heightCenter = this.canvas.height / 2;
       var currentText;
       var bottomText;
       var offsetByX = 0;
       var msgReversed;
+      var linesArray = [];
 
       //маг
       //me.x  - положение мага по x
@@ -426,6 +428,7 @@ window.Game = (function() {
         offsetByX = me.x - (640 / 6 );
         msgReversed = false;
       }
+
       //ограничитель передвижения сообщения, чтобы в дерево не врезалось
       //изначально сообщение стоит по центру, поэтому MSG_WIDTH / 2
       if(offsetByX > 0) {
@@ -436,33 +439,55 @@ window.Game = (function() {
       var drawBackground = function(context, offsetX, offsetY, color, reversed) {
         context.fillStyle = color;
         context.beginPath();
-        context.moveTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
-        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
-        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX + (20 * reversed), heightCenter + MSG_HEIGHT / 2 + offsetY + (10 * reversed));
-        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX - (20 * !reversed), heightCenter + MSG_HEIGHT / 2 + offsetY + (10 * !reversed));
-        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - MSG_HEIGHT / 2 + offsetY);
+        context.moveTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - msgHeight / 2 + offsetY);
+        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX, heightCenter - msgHeight / 2 + offsetY);
+        context.lineTo(widthCenter + MSG_WIDTH / 2 + offsetX + (20 * reversed), heightCenter + msgHeight / 2 + offsetY + (10 * reversed));
+        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX - (20 * !reversed), heightCenter + msgHeight / 2 + offsetY + (10 * !reversed));
+        context.lineTo(widthCenter - MSG_WIDTH / 2 + offsetX, heightCenter - msgHeight / 2 + offsetY);
         context.fill();
         context.closePath();
       };
-      //Разбивает на строки и пишет текст
-      function wrapText(context, text, marginLeft, marginTop, maxWidth, lineHeight) {
+
+
+      //Разбивает на строки
+      function wrapText(context, text, maxWidth, lineHeight) {
         var words = text.split(' ');
         var countWords = words.length;
         var line = '';
+        var l = 0;
+
         for (var n = 0; n < countWords; n++) {
           var testLine = line + words[n] + ' ';
           var testWidth = context.measureText(testLine).width;
           if (testWidth > maxWidth) {
-            context.fillText(line, marginLeft, marginTop);
+            linesArray[l] = line;
+            l += 1;
             line = words[n] + ' ';
-            marginTop += lineHeight;
           } else {
             line = testLine;
           }
         }
-
-        context.fillText(line, marginLeft, marginTop);
+        linesArray[l] = line;
+        msgHeight = lineHeight * (linesArray.length + 3);
       }
+
+
+        //пишет разбитый текст
+      function printText(context, lineHeight, marginLeft, marginTop) {
+        var arrLength = linesArray.length;
+        var i;
+        context.textAlign = 'left';
+        context.fillStyle = msgTextColor;
+        for(i = 0; i < arrLength; i++) {
+          context.fillText(linesArray[i], marginLeft, marginTop);
+          marginTop += lineHeight;
+        }
+        marginTop += lineHeight;
+        context.fillStyle = msgBottomColor;
+        context.textAlign = 'center';
+        context.fillText(bottomText, widthCenter + offsetByX, marginTop);
+      }
+
 
       switch (this.state.currentStatus) {
         case Verdict.WIN:
@@ -482,14 +507,13 @@ window.Game = (function() {
           bottomText = 'Нажмите пробел для старта.';
           break;
       }
+
+
+      wrapText(this.ctx, currentText, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
       drawBackground(this.ctx, 10 + offsetByX, 10, 'rgba(0, 0, 0, 0.7)', msgReversed);
       drawBackground(this.ctx, offsetByX, 0, '#FFFFFF', msgReversed);
-      this.ctx.textAlign = 'left';
-      this.ctx.fillStyle = msgTextColor;
-      wrapText(this.ctx, currentText, widthCenter - MSG_WIDTH / 2 + 20 + offsetByX, heightCenter - MSG_HEIGHT / 2 + 30, MSG_WIDTH - 20, TEXT_HEIGHT * 1.3);
-      this.ctx.fillStyle = '#018E30';
-      this.ctx.textAlign = 'center';
-      this.ctx.fillText(bottomText, widthCenter + offsetByX, heightCenter + MSG_HEIGHT / 2 - 20, MSG_WIDTH - 20);
+      printText(this.ctx, TEXT_HEIGHT * 1.3, widthCenter - MSG_WIDTH / 2 + 20 + offsetByX, heightCenter - msgHeight / 2 + 30);
+
     },
 
     /**
