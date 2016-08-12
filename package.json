@@ -24,11 +24,10 @@
     "phantomjs-prebuilt": "^2.1.7",
     "pre-git": "^3.9.1",
     "webpack": "^1.13.1",
-    "webpack-dev-middleware": "^1.6.1",
+    "webpack-dev-middleware": "^1.6.1"
   },
   "dependencies": {},
   "scripts": {
-    "build": "webpack --config webpack.config.js",
     "start": "node ./bin/server.js",
     "test": "eslint build/js",
     "unittest": "node tests/lib/index.js"
