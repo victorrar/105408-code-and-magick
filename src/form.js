@@ -48,7 +48,8 @@ window.form = (function() {
     checkLabel(rateValue < 3 && !recall.value, recallLabel);
   };
   name.oninput = function() {
-    checkLabel(/^\s{0,}$/.test(name.value) || !name.value, nameLabel);
+    name.value = name.value.trim();
+    checkLabel(!name.value, nameLabel);
   };
 
   function checkLabel(stat, label) {
