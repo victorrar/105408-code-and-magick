@@ -1,4 +1,5 @@
 'use strict';
+var cookies = require('browser-cookies');
 
 window.form = (function() {
   var formContainer = document.querySelector('.overlay-container');
@@ -9,6 +10,7 @@ window.form = (function() {
   var name = document.querySelector('input[name="review-name"]');
   var nameLabel = document.querySelector('.review-fields-label.review-fields-name');
   var submit = document.querySelector('.review-submit');
+  var thisForm = document.querySelector('.review-form');
   var rateValue;
   var rateChecked;
 
@@ -19,11 +21,13 @@ window.form = (function() {
      * @param {Function} cb
      */
     open: function(cb) {
+      getFormCookies();
       formContainer.classList.remove('invisible');
       cb();
     },
 
     close: function() {
+      setFormCookies();
       formContainer.classList.add('invisible');
 
       if (typeof this.onClose === 'function') {
@@ -51,6 +55,9 @@ window.form = (function() {
     name.value = name.value.trim();
     checkLabel(!name.value, nameLabel);
   };
+  thisForm.onsubmit = function() {
+    setFormCookies();
+  };
 
   function checkLabel(stat, label) {
     if(stat) {
@@ -68,6 +75,22 @@ window.form = (function() {
       reviewFields.classList.remove('invisible');
       submit.setAttribute('disabled', '');
     }
+  }
+
+  function setFormCookies() {
+    var expires;
+    var now = new Date();
+    var birthday = new Date(now.getFullYear(), 11, 9);
+    if(now < birthday) {
+      birthday = new Date(now.getFullYear() - 1, 11, 9);
+    }
+    expires = new Date(2 * now - birthday);
+    cookies.set('review-name', name.value, expires);
+    cookies.set('review-mark', rateChecked.value, expires);
+  }
+  function getFormCookies() {
+    name.value = cookies.get('review-name');
+    rate.value = cookies.get('review-mark');
   }
 
   rate.onchange();
