@@ -22,6 +22,8 @@ window.form = (function() {
      */
     open: function(cb) {
       getFormCookies();
+      name.oninput();
+      rate.onchange();
       formContainer.classList.remove('invisible');
       cb();
     },
@@ -90,7 +92,12 @@ window.form = (function() {
   }
   function getFormCookies() {
     name.value = cookies.get('review-name');
-    rate.value = cookies.get('review-mark');
+    var mark = cookies.get('review-mark');
+    if(mark) {
+      var rateSetChecked = document.querySelector('input[name="review-mark"][value="' + mark + '"]');
+      rateSetChecked.setAttribute('checked', '');
+    }
+
   }
 
   rate.onchange();
