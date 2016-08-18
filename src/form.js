@@ -1,5 +1,5 @@
 'use strict';
-var cookies = require('browser-cookies');
+var browserCookies = require('browser-cookies');
 
 window.form = (function() {
   var formContainer = document.querySelector('.overlay-container');
@@ -80,22 +80,22 @@ window.form = (function() {
   }
 
   function setFormCookies() {
-    var expires;
+    var expiresDate;
     var now = new Date();
     var birthday = new Date(now.getFullYear(), 11, 9);
     if(now < birthday) {
       birthday = new Date(now.getFullYear() - 1, 11, 9);
     }
-    expires = new Date(2 * now - birthday);
-    cookies.set('review-name', name.value, expires);
-    cookies.set('review-mark', rateChecked.value, expires);
+    expiresDate = new Date(2 * now - birthday);
+    browserCookies.set('review-name', name.value, {expires: expiresDate});
+    browserCookies.set('review-mark', rateChecked.value, {expires: expiresDate});
   }
   function getFormCookies() {
-    name.value = cookies.get('review-name');
-    var mark = cookies.get('review-mark');
+    name.value = browserCookies.get('review-name');
+    var mark = browserCookies.get('review-mark');
     if(mark) {
       var rateSetChecked = document.querySelector('input[name="review-mark"][value="' + mark + '"]');
-      rateSetChecked.setAttribute('checked', '');
+      rateSetChecked.checked = true;
     }
 
   }
