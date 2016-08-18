@@ -92,11 +92,8 @@ window.form = (function() {
   }
   function getFormCookies() {
     name.value = browserCookies.get('review-name');
-    var mark = browserCookies.get('review-mark');
-    if(mark) {
-      var rateSetChecked = document.querySelector('input[name="review-mark"][value="' + mark + '"]');
-      rateSetChecked.checked = true;
-    }
+    var mark = browserCookies.get('review-mark') || 3;
+    document.querySelector('#review-mark-' + mark ).checked = true;
 
   }
 
