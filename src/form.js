@@ -1,5 +1,10 @@
 'use strict';
-var browserCookies = require('browser-cookies');
+var browserCookies;
+define([
+  'browser-cookies'
+], function(cookies) {
+  browserCookies = cookies;
+});
 
 window.form = (function() {
   var formContainer = document.querySelector('.overlay-container');
