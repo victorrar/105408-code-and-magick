@@ -2,9 +2,22 @@
 define([
   './form',
   './game',
-  './reviews'
-], function() {
-
+  './reviews',
+  './gallery'
+], function(form, game, reviews, GalleryModule) {
+  var photoGallery = document.querySelector('.photogallery');
+  var photos = photoGallery.querySelectorAll('a img');
+  var photoLinks = photoGallery.querySelectorAll('a');
+  var links = [];
+  photos.forEach(function(elem, index) {
+    links[index] = elem.src;
+  });
+  var gallery = new GalleryModule(links);
+  photoLinks.forEach(function(elem, index) {
+    elem.onclick = function() {
+      gallery.show(index);
+    };
+  });
 }
 );
 
