@@ -5,13 +5,17 @@ define(
   }
 );
 
-function requestRewiews(src, cb, cbName) {
-  window[cbName] = function(data) {
+function requestRewiews(src, dataObject, cb) {
+  var xhr = new XMLHttpRequest();
+  xhr.open('GET', src +
+  '?from=' + dataObject.from +
+  '&to=' + dataObject.to +
+  '&filter=' + dataObject.filter);
+  xhr.onload = function() {
     if(typeof cb === 'function') {
-      cb(data);
+      cb(JSON.parse(xhr.responseText));
     }
   };
-  var elem = document.createElement('script');
-  elem.src = src;
-  document.head.appendChild(elem);
+  xhr.send();
+
 }
