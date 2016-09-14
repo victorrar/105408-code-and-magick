@@ -1,9 +1,7 @@
 'use strict';
-define(function() {
-  return drawElement;
-});
 
-var container = document.querySelector('.reviews-list');
+//поиск шаблона
+
 var elementToClone;
 var template = document.querySelector('#review-template');
 if ('content' in template) {
@@ -55,6 +53,39 @@ function drawElement(data) {
     element.classList.add('review-load-failure');
   }, PHOTO_TIMEOUT);
   photo.src = data.author.picture;
-  container.appendChild(element);
+  // обработчики событий
+  var reviewQuizAnswer = element.querySelectorAll('.review-quiz-answer');
+  var reviewQuizAnswerLength = reviewQuizAnswer.length;
+  for(var i = 0; i < reviewQuizAnswerLength; i++) {
+    var elem = reviewQuizAnswer[i];
+    elem.onclick = function() {
+      var oldReviewQuiz = element.querySelector('.review-quiz-answer-active');
+      if(oldReviewQuiz) {
+        oldReviewQuiz.classList.remove('review-quiz-answer-active');
+      }
+      this.classList.add('review-quiz-answer-active');
+    };
+  }
+
+  return element;
 
 }
+var self;
+var Review = function(data) {
+  self = this;
+  this.data = data;
+  this.element = drawElement(data);
+};
+Review.prototype = {
+  remove: function() {
+    var reviewQuizAnswer = self.element.querySelectorAll('.review-quiz-answer');
+    var reviewQuizAnswerLength = reviewQuizAnswer.length;
+    for(var i = 0; i < reviewQuizAnswerLength; i++) {
+      reviewQuizAnswer[i].onclick = null;
+    }
+  }
+};
+
+define(function() {
+  return Review;
+});

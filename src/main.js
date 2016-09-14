@@ -9,15 +9,19 @@ define([
   var photos = photoGallery.querySelectorAll('a img');
   var photoLinks = photoGallery.querySelectorAll('a');
   var links = [];
-  photos.forEach(function(elem, index) {
-    links[index] = elem.src;
-  });
+  var photosLength = photos.length;
+  for(var i = 0; i < photosLength; i++) {
+    links[i] = photos[i].src;
+  }
   var gallery = new GalleryModule(links);
-  photoLinks.forEach(function(elem, index) {
-    elem.onclick = function() {
-      gallery.show(index);
-    };
-  });
+  var photolinksLength = photoLinks.length;
+  for(var index = 0; index < photolinksLength; index++) {
+    (function(currentPhoto) {
+      photoLinks[index].onclick = function() {
+        gallery.show(currentPhoto);
+      };
+    })(index);
+  }
 }
 );
 
