@@ -55,15 +55,18 @@ function drawElement(data) {
   photo.src = data.author.picture;
   // обработчики событий
   var reviewQuizAnswer = element.querySelectorAll('.review-quiz-answer');
-  reviewQuizAnswer.forEach(function(elem) {
+  var reviewQuizAnswerLength = reviewQuizAnswer.length;
+  for(var i = 0; i < reviewQuizAnswerLength; i++) {
+    var elem = reviewQuizAnswer[i];
     elem.onclick = function() {
       var oldReviewQuiz = element.querySelector('.review-quiz-answer-active');
       if(oldReviewQuiz) {
         oldReviewQuiz.classList.remove('review-quiz-answer-active');
       }
-      elem.classList.add('review-quiz-answer-active');
+      this.classList.add('review-quiz-answer-active');
     };
-  });
+  }
+
   return element;
 
 }
@@ -76,9 +79,10 @@ var Review = function(data) {
 Review.prototype = {
   remove: function() {
     var reviewQuizAnswer = self.element.querySelectorAll('.review-quiz-answer');
-    reviewQuizAnswer.forEach(function(elem) {
-      elem.onclick = null;
-    });
+    var reviewQuizAnswerLength = reviewQuizAnswer.length;
+    for(var i = 0; i < reviewQuizAnswerLength; i++) {
+      reviewQuizAnswer[i].onclick = null;
+    }
   }
 };
 

@@ -3,7 +3,7 @@
 module.exports = function(list, filterID) {
   switch (filterID) {
     case 'reviews-all':
-      return list;
+      break;
 
     case 'reviews-recent':
       var recentList = list.filter(function(elem) {
@@ -16,7 +16,8 @@ module.exports = function(list, filterID) {
       recentList.sort(function(a, b) {
         return a.created - b.created;
       });
-      return recentList;
+      list = recentList;
+      break;
 
     case 'reviews-good':
       var goodList = list.filter(function(elem) {
@@ -29,7 +30,8 @@ module.exports = function(list, filterID) {
       goodList.sort(function(a, b) {
         return b.rating - a.rating;
       });
-      return goodList;
+      list = goodList;
+      break;
 
     case 'reviews-bad':
       var badList = list.filter(function(elem) {
@@ -42,13 +44,14 @@ module.exports = function(list, filterID) {
       badList.sort(function(a, b) {
         return a.rating - b.rating;
       });
-      return badList;
+      list = badList;
+      break;
 
     case 'reviews-popular':
       list.sort(function(a, b) {
         return b.review_usefulness - a.review_usefulness;
       });
-      return list;
+      break;
     default:
   }
   return list;
