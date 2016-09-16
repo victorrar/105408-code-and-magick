@@ -1,28 +1,32 @@
 'use strict';
-
+var optimizeThrottle;
+define([
+  './throttle'
+], function(throttle) {
+  optimizeThrottle = throttle;
+});
 var sky = document.querySelector('.header-clouds');
-var lastDate = 0;
 var skyVisibilityFlag = true;
 function skyParallax() {
   var scrollTop = document.body.scrollTop;
   sky.style.backgroundPosition = scrollTop + 'px';
 }
 function skyVisiblityCheck() {
-  if((Date.now() - lastDate) >= 100) {
-    var scrollTop = document.body.scrollTop;
-    //sky
-    if(scrollTop > sky.offsetHeight && skyVisibilityFlag) {
-      window.removeEventListener('scroll', skyParallax);
-      skyVisibilityFlag = false;
-    }
-    if(scrollTop < sky.offsetHeight && !skyVisibilityFlag) {
-      window.addEventListener('scroll', skyParallax);
-      skyVisibilityFlag = true;
-    }
+  var scrollTop = document.body.scrollTop;
+  //sky
+  if(scrollTop > sky.offsetHeight && skyVisibilityFlag) {
+    window.removeEventListener('scroll', skyParallax);
+    skyVisibilityFlag = false;
+  }
+  if(scrollTop < sky.offsetHeight && !skyVisibilityFlag) {
+    window.addEventListener('scroll', skyParallax);
+    skyVisibilityFlag = true;
   }
 }
-window.addEventListener('scroll', skyParallax);
-window.addEventListener('scroll', skyVisiblityCheck);
+var optimizedSkyParallax = optimizeThrottle(skyParallax, 16);
+var optimizedSkyVisiblityCheck = optimizeThrottle(skyVisiblityCheck, 100);
+window.addEventListener('scroll', optimizedSkyParallax);
+window.addEventListener('scroll', optimizedSkyVisiblityCheck);
 
 window.Game = (function() {
   /**

@@ -1,10 +1,13 @@
 'use strict';
+var optimizeThrottle;
 define([
   './form',
   './game',
   './reviews',
-  './gallery'
-], function(form, game, reviews, GalleryModule) {
+  './gallery',
+  './throttle'
+], function(form, game, reviews, GalleryModule, throttle) {
+  optimizeThrottle = throttle;
   var photoGallery = document.querySelector('.photogallery');
   var photos = photoGallery.querySelectorAll('a img');
   var photoLinks = photoGallery.querySelectorAll('a');
@@ -45,22 +48,22 @@ define([
   window.form.onClose = function() {
     game.setDeactivated(false);
   };
-  var lastDate = 0;
+
+
   var demoVisibilityFlag = true;
   var demo = document.querySelector('.demo');
   function demoVisiblityCheck() {
-    if((Date.now() - lastDate) >= 100) {
-      var scrollTop = document.body.scrollTop;
-      //demo
-      if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
-        game.setGameStatus(window.Game.Verdict.PAUSE);
-        demoVisibilityFlag = false;
-      }
-      if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
-        demoVisibilityFlag = true;
-      }
-      lastDate = Date.now();
+    var scrollTop = document.body.scrollTop;
+    //demo
+    if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
+      game.setGameStatus(window.Game.Verdict.PAUSE);
+      demoVisibilityFlag = false;
+    }
+    if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
+      demoVisibilityFlag = true;
     }
   }
-  window.addEventListener('scroll', demoVisiblityCheck);
+  var optimizedDemoVisibilityCheck = optimizeThrottle(demoVisiblityCheck, 100);
+
+  window.addEventListener('scroll', optimizedDemoVisibilityCheck);
 })();
