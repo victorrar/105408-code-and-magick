@@ -8,7 +8,7 @@ function trottle(func, delay) {
   var optimizedFunc = function() {
     if(Date.now() - lastDate >= delay) {
       func();
-    lastDate = Date.now();
+      lastDate = Date.now();
     }
   };
   return optimizedFunc;
