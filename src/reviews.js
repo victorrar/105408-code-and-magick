@@ -4,12 +4,6 @@ var container = document.querySelector('.reviews-list');
 
 var reviews;
 
-function initializeReviews() {
-  var filter = document.querySelector('.reviews-filter');
-  filter.classList.add('invisible');
-  filter.classList.remove('invisible');
-
-}
 
 define([
   './review',
@@ -34,10 +28,16 @@ define([
     moreReviews.classList.remove('invisible');
     var filterBlock = document.querySelector('.reviews-filter');
     var PAGE_SIZE = 3;
+    var filterFromStorage = localStorage.getItem('filter');
+    if(filterFromStorage) {
+      document.getElementById(filterFromStorage).checked = true;
+    } else {
+      filterFromStorage = 'reviews-all';
+    }
     var requestSettings = {
       from: 0,
       to: PAGE_SIZE,
-      filter: 'reviews-all',
+      filter: filterFromStorage
     };
 
     var loadMore = function() {
@@ -53,6 +53,7 @@ define([
         to: PAGE_SIZE,
         filter: evt.target.id,
       };
+      localStorage.setItem('filter', evt.target.id);
       container.innerHTML = '';
       reviewsDelete.forEach(function(elem) {
         elem();
@@ -66,5 +67,3 @@ define([
 
   }
 );
-
-initializeReviews();
