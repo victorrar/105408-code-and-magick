@@ -6,10 +6,8 @@ var galleryClose = document.querySelector('.overlay-gallery-close');
 var galleryControlLeft = document.querySelector('.overlay-gallery-control-left');
 var galleryControlRight = document.querySelector('.overlay-gallery-control-right');
 var galleryPreview = document.querySelector('.overlay-gallery-preview');
-var self;
 var picturesCount;
 var Gallery = function(dataArray) {
-  self = this;
   this.pictures = dataArray;
   picturesCount = dataArray.length;
   this.activePicture = 0;
@@ -25,37 +23,39 @@ var Gallery = function(dataArray) {
 
 Gallery.prototype = {
   show: function(number) {
-    self.galleryClose.onclick = function() {
-      self.hide();
-    };
-    self.galleryControlLeft.onclick = function() {
-      if(self.activePicture > 0) {
-        self.setActivePicture(self.activePicture - 1);
+    this.galleryClose.onclick = (function() {
+      this.hide();
+    }).bind(this);
+    this.galleryControlLeft.onclick = (function() {
+      if(this.activePicture > 0) {
+        this.setActivePicture(this.activePicture - 1);
       }
-    };
-    self.galleryControlRight.onclick = function() {
-      if(self.activePicture < picturesCount - 1) {
-        self.setActivePicture(self.activePicture + 1);
+    }).bind(this);
+    this.galleryControlRight.onclick = (function() {
+      if(this.activePicture < picturesCount - 1) {
+        this.setActivePicture(this.activePicture + 1);
       }
-    };
-    self.galleryElement.classList.remove('invisible');
-    self.setActivePicture(number);
+    }).bind(this);
+    this.galleryElement.classList.remove('invisible');
+    this.setActivePicture(number);
   },
   hide: function() {
-    self.galleryElement.classList.add('invisible');
-    //self.galleryElement.onclick = null;
+    this.galleryElement.classList.add('invisible');
+    this.galleryClose.onclick = null;
+    this.galleryControlLeft.onclick = null;
+    this.galleryControlRight.onclick = null;
   },
   setActivePicture: function(number) {
-    self.activePicture = number;
+    this.activePicture = number;
     var picture = new Image();
-    picture.src = self.pictures[number];
+    picture.src = this.pictures[number];
     var oldImage = galleryPreview.querySelector('img');
     if(oldImage) {
       galleryPreview.replaceChild(picture, oldImage);
     } else {
       galleryPreview.appendChild(picture);
     }
-    self.galleryNumberCurrent.innerHTML = number + 1;
+    this.galleryNumberCurrent.innerHTML = number + 1;
   }
 };
 

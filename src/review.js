@@ -70,15 +70,15 @@ function drawElement(data) {
   return element;
 
 }
-var self;
 var Review = function(data) {
-  self = this;
+  console.log(this);
   this.data = data;
   this.element = drawElement(data);
+  this.remove = this.remove.bind(this);
 };
 Review.prototype = {
   remove: function() {
-    var reviewQuizAnswer = self.element.querySelectorAll('.review-quiz-answer');
+    var reviewQuizAnswer = this.element.querySelectorAll('.review-quiz-answer');
     var reviewQuizAnswerLength = reviewQuizAnswer.length;
     for(var i = 0; i < reviewQuizAnswerLength; i++) {
       reviewQuizAnswer[i].onclick = null;
