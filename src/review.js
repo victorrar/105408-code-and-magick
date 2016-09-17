@@ -71,7 +71,6 @@ function drawElement(data) {
 
 }
 var Review = function(data) {
-  console.log(this);
   this.data = data;
   this.element = drawElement(data);
   this.remove = this.remove.bind(this);
