@@ -50,7 +50,7 @@ define([
   var demo = document.querySelector('.demo');
   function demoVisiblityCheck() {
     if((Date.now() - lastDate) >= 100) {
-      var scrollTop = document.body.scrollTop;
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
       //demo
       if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
         game.setGameStatus(window.Game.Verdict.PAUSE);
