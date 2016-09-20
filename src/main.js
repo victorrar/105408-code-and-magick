@@ -53,6 +53,7 @@ define([
   var demoVisibilityFlag = true;
   var demo = document.querySelector('.demo');
   function demoVisiblityCheck() {
+<<<<<<< HEAD
     var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     //demo
     if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
@@ -61,6 +62,19 @@ define([
     }
     if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
       demoVisibilityFlag = true;
+=======
+    if((Date.now() - lastDate) >= 100) {
+      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+      //demo
+      if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
+        game.setGameStatus(window.Game.Verdict.PAUSE);
+        demoVisibilityFlag = false;
+      }
+      if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
+        demoVisibilityFlag = true;
+      }
+      lastDate = Date.now();
+>>>>>>> refs/remotes/origin/module7-task2
     }
   }
   var optimizedDemoVisibilityCheck = optimizeThrottle(demoVisiblityCheck, 100);
