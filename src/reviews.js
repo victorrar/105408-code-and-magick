@@ -28,12 +28,8 @@ define([
     moreReviews.classList.remove('invisible');
     var filterBlock = document.querySelector('.reviews-filter');
     var PAGE_SIZE = 3;
-    var filterFromStorage = localStorage.getItem('filter');
-    if(filterFromStorage) {
-      document.getElementById(filterFromStorage).checked = true;
-    } else {
-      filterFromStorage = 'reviews-all';
-    }
+    var filterFromStorage = localStorage.getItem('filter') || 'reviews-all';
+    document.getElementById(filterFromStorage).checked = true;
     var requestSettings = {
       from: 0,
       to: PAGE_SIZE,
