@@ -8,11 +8,11 @@ define([
 var sky = document.querySelector('.header-clouds');
 var skyVisibilityFlag = true;
 function skyParallax() {
-  var scrollTop = document.body.scrollTop;
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
   sky.style.backgroundPosition = scrollTop + 'px';
 }
 function skyVisiblityCheck() {
-  var scrollTop = document.body.scrollTop;
+  var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
   //sky
   if(scrollTop > sky.offsetHeight && skyVisibilityFlag) {
     window.removeEventListener('scroll', skyParallax);
