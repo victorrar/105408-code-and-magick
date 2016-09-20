@@ -53,7 +53,7 @@ define([
   var demoVisibilityFlag = true;
   var demo = document.querySelector('.demo');
   function demoVisiblityCheck() {
-    var scrollTop = document.body.scrollTop;
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
     //demo
     if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
       game.setGameStatus(window.Game.Verdict.PAUSE);
