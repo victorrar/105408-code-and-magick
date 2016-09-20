@@ -61,17 +61,6 @@ define([
     }
     if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
       demoVisibilityFlag = true;
-    if((Date.now() - lastDate) >= 100) {
-      var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-      //demo
-      if(scrollTop > (demo.offsetTop + demo.offsetHeight) && demoVisibilityFlag) {
-        game.setGameStatus(window.Game.Verdict.PAUSE);
-        demoVisibilityFlag = false;
-      }
-      if(scrollTop < (demo.offsetTop + demo.offsetHeight) && !demoVisibilityFlag) {
-        demoVisibilityFlag = true;
-      }
-      lastDate = Date.now();
     }
   }
   var optimizedDemoVisibilityCheck = optimizeThrottle(demoVisiblityCheck, 100);
