@@ -12,6 +12,7 @@ function skyParallax() {
   sky.style.backgroundPosition = scrollTop + 'px';
 }
 function skyVisiblityCheck() {
+<<<<<<< HEAD
   var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
   //sky
   if(scrollTop > sky.offsetHeight && skyVisibilityFlag) {
@@ -21,6 +22,19 @@ function skyVisiblityCheck() {
   if(scrollTop < sky.offsetHeight && !skyVisibilityFlag) {
     window.addEventListener('scroll', skyParallax);
     skyVisibilityFlag = true;
+=======
+  if((Date.now() - lastDate) >= 100) {
+    var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    //sky
+    if(scrollTop > sky.offsetHeight && skyVisibilityFlag) {
+      window.removeEventListener('scroll', skyParallax);
+      skyVisibilityFlag = false;
+    }
+    if(scrollTop < sky.offsetHeight && !skyVisibilityFlag) {
+      window.addEventListener('scroll', skyParallax);
+      skyVisibilityFlag = true;
+    }
+>>>>>>> refs/remotes/origin/module7-task2
   }
 }
 var optimizedSkyParallax = optimizeThrottle(skyParallax, 16);
